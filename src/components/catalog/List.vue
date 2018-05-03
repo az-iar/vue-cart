@@ -6,7 +6,7 @@
     </div>
 </template>
 <script>
-    import Item from '@/components/products/ListItem.vue';
+    import Item from '@/components/catalog/Item.vue';
 
     export default {
         name: 'ProductList',
