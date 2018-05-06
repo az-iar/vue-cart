@@ -3,16 +3,15 @@
         <img src="http://via.placeholder.com/500" alt="" class="mb-2 w-full">
         <h1 class="mb-4 text-2xl">{{ product.name }}</h1>
         <p class="mb-3">{{ formattedPrice }}</p>
-        <button class="block w-full bg-green hover:bg-green-dark text-white p-3 mx-auto rounded font-bold uppercase"
-                type="button" @click="addToCart(product)">
-            Add To Cart
-        </button>
+        <Counter @increment="increment" @decrement="decrement" :value="itemCount"/>
     </div>
 </template>
 <script>
-    import {mapMutations} from 'vuex';
+    import {mapMutations, mapGetters} from 'vuex';
+    import Counter from '@/components/buttons/Counter';
 
     export default {
+        components: {Counter},
         props: {
             product: {
                 required: true,
@@ -20,10 +19,26 @@
             }
         },
         computed: {
+            ...mapGetters(['cartItems']),
             formattedPrice() {
                 return 'RM' + this.product.price;
+            },
+            itemCount() {
+                let productInCart = this.cartItems.find(item => {
+                    return item.id == this.product.id;
+                });
+
+                return productInCart ? productInCart.count : 0;
             }
         },
-        methods: mapMutations(['addToCart'])
+        methods: {
+            ...mapMutations(['addToCart']),
+            increment(count) {
+                this.addToCart(Object.assign(this.product, {count: count}));
+            },
+            decrement(count) {
+                this.addToCart(Object.assign(this.product, {count: count}));
+            }
+        }
     }
 </script>

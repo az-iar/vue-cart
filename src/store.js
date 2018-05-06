@@ -18,17 +18,23 @@ export default new Vuex.Store({
             });
             // if exists, increment the count
             if (itemIndex != -1) {
-                items = items.map((item, index) => {
-                    if (index === itemIndex) {
-                        return Object.assign(item, {count: item.count + 1})
-                    }
+                if (product.count === 0) {
+                    items = items.filter(item => {
+                        return item.id != product.id
+                    })
+                } else {
+                    items = items.map((item, index) => {
+                        if (index === itemIndex) {
+                            return product;
+                        }
 
-                    return item;
-                })
+                        return item;
+                    })
+                }
             }
             // else, add product to cart
             else {
-                items.push(Object.assign(product, {count: 1}))
+                items.push(product)
             }
 
             state.cart.items = items;
